@@ -15,7 +15,7 @@ class HomeController extends GetxController {
   bool isLoading = true;
   bool isPaginationActive = false;
 
-  int pageCount = 25;
+  int pageCount = 17;
 
   // get home page data api call
   Future getHomePage([bool isPagination = false]) async {
@@ -38,7 +38,7 @@ class HomeController extends GetxController {
 
         final jsonMap = json.decode(response);
         if (isPaginationActive) {
-          homeModel.assignAll(List<HomePageDataModel>.from(
+          homeModel.addAll(List<HomePageDataModel>.from(
             jsonMap["data"].map(
               (x) => HomePageDataModel.fromMap(x),
             ),

@@ -24,6 +24,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: blue,
         title: const Text("Home"),
@@ -50,8 +51,10 @@ class _HomePageState extends State<HomePage> {
           if (scrollNotification.metrics.atEdge) {
             if (_scrollController.position.userScrollDirection ==
                 ScrollDirection.reverse) {
-              homeController.getHomePage(true);
-              log("max scroll reached");
+              if (homeController.homeModel.length < 50) {
+                homeController.getHomePage(true);
+                log("max scroll reached");
+              }
             }
           }
           return true;
@@ -85,26 +88,26 @@ class _HomePageState extends State<HomePage> {
                           },
                         ),
                       ),
-                      GetBuilder<HomeController>(
-                        id: "pagination",
-                        builder: (controller) {
-                          return controller.isPaginationActive
-                              ? const SizedBox(
-                                  height: 50,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      CircularProgressIndicator.adaptive(),
-                                    ],
-                                  ),
-                                )
-                              : const SizedBox();
-                        },
-                      )
                     ],
                   );
           },
         ),
+      ),
+      bottomNavigationBar: GetBuilder<HomeController>(
+        id: "pagination",
+        builder: (controller) {
+          return controller.isPaginationActive
+              ? const SizedBox(
+                  height: 50,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircularProgressIndicator.adaptive(),
+                    ],
+                  ),
+                )
+              : const SizedBox();
+        },
       ),
     );
   }
