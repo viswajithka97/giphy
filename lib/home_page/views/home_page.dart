@@ -18,30 +18,35 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final ScrollController _scrollController = ScrollController();
+  bool isDark = false;
 
   final homeController = Get.put(HomeController(), permanent: true);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: isDark ? kblack : kwhite,
       appBar: AppBar(
-        backgroundColor: blue,
-        title: const Text("Home"),
+        backgroundColor: kblue,
+        title: Text(
+          "Home",
+          style: TextStyle(color: isDark ? kwhite : kblack),
+        ),
         centerTitle: false,
         actions: [
           TextButton(
-            style: const ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll(Colors.black)),
+            style: ButtonStyle(
+                backgroundColor:
+                    MaterialStatePropertyAll(isDark ? kwhite : kblack)),
             onPressed: () {
               Get.to(
                 () => const TrendingPage(),
                 transition: Transition.cupertino,
               );
             },
-            child: const Text(
+            child: Text(
               "Trending",
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: isDark ? kblack : kwhite),
             ),
           ).paddingOnly(right: 10)
         ],
@@ -97,9 +102,10 @@ class _HomePageState extends State<HomePage> {
         id: "pagination",
         builder: (controller) {
           return controller.isPaginationActive
-              ? const SizedBox(
+              ? Container(
+                  color: isDark ? kwhite : null,
                   height: 50,
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CircularProgressIndicator.adaptive(),
@@ -108,6 +114,14 @@ class _HomePageState extends State<HomePage> {
                 )
               : const SizedBox();
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {
+            isDark = !isDark;
+          });
+        },
+        child: Icon(isDark ? Icons.light_mode : Icons.dark_mode),
       ),
     );
   }
